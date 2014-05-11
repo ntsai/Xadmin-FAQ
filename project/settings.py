@@ -33,15 +33,15 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     #lib
-    # 'django_evolution',
     'crispy_forms',
     'reversion',
     'xadmin',
     'mptt',
+    'DjangoUeditor',
 
     #app
-
-    #xplugin
+    'faq',
+    'xplugin',
 
 )
 
