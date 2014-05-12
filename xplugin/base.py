@@ -2,7 +2,11 @@
 #author 'sai'
 import xadmin
 from xadmin import widgets
-from xadmin.views import BaseAdminPlugin, ModelFormAdminView, DetailAdminView,ModelAdminView,ListAdminView,CreateAdminView,UpdateAdminView
+from xadmin.views import LoginView,BaseAdminView,BaseAdminPlugin, ModelFormAdminView, \
+    DetailAdminView,ModelAdminView,ListAdminView,CreateAdminView,UpdateAdminView
+from django.contrib.auth import login,authenticate
+from django.contrib.auth.models import User
+from django.contrib.auth import REDIRECT_FIELD_NAME
 
 #列表点击进入Detail
 class ListDetailPlugin(BaseAdminPlugin):
@@ -13,17 +17,18 @@ class ListDetailPlugin(BaseAdminPlugin):
         return  self.get_model_url(self.model,'detail',args[0].pk)
 xadmin.site.register_plugin(ListDetailPlugin, ListAdminView)
 
-# #新建数据自动保存操作者
-# class UserSavePlugin(BaseAdminPlugin):
-#     save_uesr = False
-#     save_user_model = 'user'
-#     def init_request(self, *args, **kwargs):
-#         return bool(self.save_uesr)
-#
-#     def save_models(self,__):
-#         __()
-#         a = getattr(self.admin_view.new_obj,self.save_user_model)
-#         a = self.user
-#         a.save()
-#
-# xadmin.site.register_plugin(UserSavePlugin, CreateAdminView)
+class AnonymousUserPlugin(BaseAdminPlugin):
+    def init_request(self, *args, **kwargs):
+        if not self.request.user.id:
+            user = authenticate(username='AnonymousUser',password='admin')
+            login(self.request,user)
+xadmin.site.register_plugin(AnonymousUserPlugin, BaseAdminView)
+
+class UserLoginPlugin(BaseAdminPlugin):
+    def update_params(self,__,defaults):
+        new_context = {
+            REDIRECT_FIELD_NAME: self.get_admin_url('index'),
+        }
+        defaults['extra_context'].update(new_context)
+        return defaults
+xadmin.site.register_plugin(UserLoginPlugin, LoginView)

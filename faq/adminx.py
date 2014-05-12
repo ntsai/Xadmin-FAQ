@@ -42,6 +42,4 @@ class FaqAdmin(object):
         if self.request.is_ajax():
            return qs.filter(parent__isnull = True)
         return qs
-
 xadmin.site.register(Faq,FaqAdmin)
-

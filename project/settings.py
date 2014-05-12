@@ -39,11 +39,13 @@ INSTALLED_APPS = (
     'mptt',
     'DjangoUeditor',
 
+
     #app
     'faq',
     'xplugin',
 
 )
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -116,3 +118,4 @@ STATIC_ROOT = ''
 
 import os
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
+# ANONYMOUS_USER_ID = -1
